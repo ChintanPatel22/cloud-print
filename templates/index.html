@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CloudPrint — Remote Printing System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+
+  <!-- Background Grid -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- Nav -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-text">CloudPrint</span>
+    </div>
+    <div class="nav-links">
+      <a href="/" class="nav-link active">Upload</a>
+      <a href="/dashboard" class="nav-link">Dashboard</a>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot" id="connectionDot"></span>
+      <span class="status-text" id="connectionText">Connecting...</span>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-tag">Cloud Printing System v2.0</div>
+    <h1 class="hero-title">
+      Print from<br/>
+      <span class="hero-accent">anywhere.</span>
+    </h1>
+    <p class="hero-sub">Upload your document, choose your settings,<br/>and watch it print — instantly.</p>
+  </header>
+
+  <!-- Main Upload Card -->
+  <main class="main-container">
+
+    <div class="upload-card">
+
+      <!-- Drop Zone -->
+      <div class="drop-zone" id="dropZone">
+        <div class="drop-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+            <path d="M24 4L24 32M24 4L14 14M24 4L34 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 36V40C6 42.2 7.8 44 10 44H38C40.2 44 42 42.2 42 40V36" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="drop-text">
+          <span class="drop-main">Drop your file here</span>
+          <span class="drop-sub">or <label for="fileInput" class="browse-link">browse files</label></span>
+        </div>
+        <div class="drop-formats">PDF · JPG · PNG · Max 50MB</div>
+        <input type="file" id="fileInput" accept=".pdf,.jpg,.jpeg,.png" hidden />
+
+        <!-- File Preview -->
+        <div class="file-preview" id="filePreview" style="display:none">
+          <div class="file-icon" id="fileIcon">📄</div>
+          <div class="file-info">
+            <span class="file-name" id="fileName"></span>
+            <span class="file-size" id="fileSize"></span>
+          </div>
+          <button class="file-remove" id="fileRemove">✕</button>
+        </div>
+      </div>
+
+      <!-- Print Settings -->
+      <div class="settings-grid">
+
+        <div class="setting-group">
+          <label class="setting-label">Printer</label>
+          <div class="select-wrap">
+            <select id="printerSelect" class="setting-select">
+              <option value="printer-1">Office Printer</option>
+              <option value="printer-2">Color Printer</option>
+              <option value="printer-3">Large Format Printer</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Copies</label>
+          <div class="counter">
+            <button class="counter-btn" id="decreaseCopies">−</button>
+            <span class="counter-val" id="copiesVal">1</span>
+            <button class="counter-btn" id="increaseCopies">+</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Color Mode</label>
+          <div class="toggle-group">
+            <button class="toggle-btn active" id="bwBtn" data-value="bw">B&W</button>
+            <button class="toggle-btn" id="colorBtn" data-value="color">Color</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <label class="setting-label">Pages</label>
+          <div class="select-wrap">
+            <select id="pageRange" class="setting-select">
+              <option value="all">All Pages</option>
+              <option value="odd">Odd Pages</option>
+              <option value="even">Even Pages</option>
+              <option value="custom">Custom Range</option>
+            </select>
+          </div>
+          <div class="custom-range-wrap" id="customRangeWrap">
+            <input
+              type="text"
+              id="customRangeInput"
+              class="custom-range-input"
+              placeholder="e.g. 1-3, 5, 7-9"
+              autocomplete="off"
+            />
+            <span class="custom-range-hint">Separate pages with commas</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Submit Button -->
+      <button class="print-btn" id="printBtn" disabled>
+        <span class="btn-label">Send to Printer</span>
+        <span class="btn-icon">→</span>
+        <div class="btn-progress" id="btnProgress"></div>
+      </button>
+
+    </div>
+
+    <!-- Live Jobs Panel -->
+    <div class="jobs-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Live Queue</h2>
+        <span class="panel-badge" id="queueCount">0</span>
+      </div>
+      <div class="jobs-list" id="jobsList">
+        <div class="jobs-empty">
+          <span>No print jobs yet</span>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon">✓</span>
+    <span class="toast-msg" id="toastMsg"></span>
+  </div>
+
+  <!-- Upload Progress Overlay -->
+  <div class="upload-overlay" id="uploadOverlay" style="display:none">
+    <div class="upload-progress-card">
+      <div class="progress-spinner"></div>
+      <div class="progress-label">Sending to server...</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

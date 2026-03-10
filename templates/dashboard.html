@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — CloudPrint</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body class="dashboard-body">
+
+  <div class="bg-grid"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <!-- Nav -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-text">CloudPrint</span>
+    </div>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Upload</a>
+      <a href="/dashboard" class="nav-link active">Dashboard</a>
+    </div>
+    <div class="nav-status">
+      <span class="status-dot" id="connectionDot"></span>
+      <span class="status-text" id="connectionText">Connecting...</span>
+    </div>
+  </nav>
+
+  <!-- Dashboard Header -->
+  <header class="dash-header">
+    <div class="dash-title-wrap">
+      <h1 class="dash-title">Print Dashboard</h1>
+      <span class="dash-live"><span class="pulse-dot"></span> Live</span>
+    </div>
+    <div class="dash-time" id="dashTime"></div>
+  </header>
+
+  <!-- Stats Row -->
+  <section class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Total Jobs</div>
+      <div class="stat-value" id="statTotal">0</div>
+      <div class="stat-bar"><div class="stat-bar-fill total-fill"></div></div>
+    </div>
+    <div class="stat-card waiting">
+      <div class="stat-label">Waiting</div>
+      <div class="stat-value" id="statWaiting">0</div>
+      <div class="stat-icon">⏳</div>
+    </div>
+    <div class="stat-card printing">
+      <div class="stat-label">Printing</div>
+      <div class="stat-value" id="statPrinting">0</div>
+      <div class="stat-icon anim-spin">⚙</div>
+    </div>
+    <div class="stat-card completed">
+      <div class="stat-label">Completed</div>
+      <div class="stat-value" id="statCompleted">0</div>
+      <div class="stat-icon">✓</div>
+    </div>
+  </section>
+
+  <!-- Printers + Jobs Layout -->
+  <section class="dash-grid">
+
+    <!-- Printers Panel -->
+    <div class="printers-panel">
+      <h2 class="panel-title">Printers</h2>
+      <div id="printersList" class="printers-list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- Jobs Table Panel -->
+    <div class="jobs-table-panel">
+      <div class="table-header">
+        <h2 class="panel-title">All Print Jobs</h2>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="waiting">Waiting</button>
+          <button class="filter-tab" data-filter="printing">Printing</button>
+          <button class="filter-tab" data-filter="completed">Completed</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="jobs-table">
+          <thead>
+            <tr>
+              <th>Job ID</th>
+              <th>File</th>
+              <th>Printer</th>
+              <th>Copies</th>
+              <th>Color</th>
+              <th>Status</th>
+              <th>Time</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="jobsTableBody">
+            <tr class="empty-row">
+              <td colspan="8">No print jobs yet. <a href="/">Upload a file</a> to get started.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,6 +1,3 @@
-import eventlet
-eventlet.monkey_patch()
-
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_socketio import SocketIO, emit
 import os
@@ -10,18 +7,6 @@ import time
 import threading
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
-
-#from flask import Flask, render_template, request, jsonify, send_from_directory
-#from flask_socketio import SocketIO, emit
-#import os
-"""
-import uuid
-import json
-import time
-import threading
-from datetime import datetime, timedelta
-from werkzeug.utils import secure_filename
-"""
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cloudprint-secret-2024'
@@ -231,6 +216,4 @@ def handle_connect():
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     os.makedirs(app.config['PRINTED_FOLDER'], exist_ok=True)
-
-    port = int(os.environ.get("PORT", 5000))
-    socketio.run(app, host='0.0.0.0', port=port, debug=True)
+    socketio.run(app, debug=True, host='0.0.0.0', port=5000)

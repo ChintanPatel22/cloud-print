@@ -3,3 +3,4 @@ flask-socketio
 werkzeug
 python-socketio
 eventlet
+gunicorn

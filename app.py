@@ -11,15 +11,17 @@ import threading
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 
-from flask import Flask, render_template, request, jsonify, send_from_directory
-from flask_socketio import SocketIO, emit
-import os
+#from flask import Flask, render_template, request, jsonify, send_from_directory
+#from flask_socketio import SocketIO, emit
+#import os
+"""
 import uuid
 import json
 import time
 import threading
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
+"""
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cloudprint-secret-2024'
